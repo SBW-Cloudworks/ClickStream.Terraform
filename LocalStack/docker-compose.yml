@@ -2,13 +2,13 @@ version: "3.9"
 
 services:
   localstack:
-    image: localstack/localstack:4.9.2
+    image: localstack/localstack-pro:4.9.2
     container_name: localstack-main
     ports:
       - "4566:4566"            # Edge port (quan trọng nhất)
       - "4510-4559:4510-4559"  # Optional – external service ports
     environment:
-      - SERVICES=s3,sqs,lambda,dynamodb,cloudwatch,sts
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:?}
       - DEFAULT_REGION=ap-southeast-1
       - DEBUG=1
     volumes:
