@@ -32,6 +32,18 @@ variable "region" {
   default     = "ap-southeast-1"
 }
 
+variable "enable_ec2" {
+  description = "Create EC2 placeholders (enable only if LocalStack EC2 is configured)."
+  type        = bool
+  default     = false
+}
+
+variable "ec2_ami" {
+  description = "AMI ID for placeholder EC2 instances (ignored when enable_ec2 is false)."
+  type        = string
+  default     = "ami-12345678"
+}
+
 variable "localstack_endpoint" {
   description = "Base edge endpoint for LocalStack."
   type        = string
@@ -500,7 +512,6 @@ resource "aws_lambda_permission" "allow_apigw" {
 
 resource "aws_api_gateway_deployment" "ingest" {
   rest_api_id = aws_api_gateway_rest_api.ingest.id
-  stage_name  = var.environment
 
   triggers = {
     redeploy = sha1(join("", [
@@ -513,6 +524,13 @@ resource "aws_api_gateway_deployment" "ingest" {
     aws_api_gateway_integration.post_events,
     aws_lambda_permission.allow_apigw
   ]
+}
+
+resource "aws_api_gateway_stage" "ingest" {
+  stage_name    = var.environment
+  rest_api_id   = aws_api_gateway_rest_api.ingest.id
+  deployment_id = aws_api_gateway_deployment.ingest.id
+  tags          = local.tags
 }
 
 # -----------------------
@@ -572,7 +590,8 @@ resource "aws_sns_topic" "alerts" {
 # Compute placeholders (EC2)
 # -----------------------
 resource "aws_instance" "oltp" {
-  ami                         = "ami-12345678"
+  count                       = var.enable_ec2 ? 1 : 0
+  ami                         = var.ec2_ami
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.private_oltp.id
   vpc_security_group_ids      = [aws_security_group.oltp.id]
@@ -582,7 +601,8 @@ resource "aws_instance" "oltp" {
 }
 
 resource "aws_instance" "analytics_dw" {
-  ami                         = "ami-12345678"
+  count                       = var.enable_ec2 ? 1 : 0
+  ami                         = var.ec2_ami
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.private_analytics.id
   vpc_security_group_ids      = [aws_security_group.analytics.id]
@@ -592,7 +612,8 @@ resource "aws_instance" "analytics_dw" {
 }
 
 resource "aws_instance" "r_shiny" {
-  ami                         = "ami-12345678"
+  count                       = var.enable_ec2 ? 1 : 0
+  ami                         = var.ec2_ami
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.private_analytics.id
   vpc_security_group_ids      = [aws_security_group.analytics.id]
