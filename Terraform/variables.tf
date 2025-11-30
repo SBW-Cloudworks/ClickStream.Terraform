@@ -1,63 +1,27 @@
-variable "region" {
-  description = "AWS region for LocalStack emulation."
-  type        = string
-  default     = "ap-southeast-1"
+# Tên project – dùng để đặt tag và tên IAM Role
+variable "project_name" {
+  default = "clickstream-local-sg"
 }
 
-variable "localstack_endpoint" {
-  description = "Base edge endpoint for LocalStack."
-  type        = string
-  default     = "http://localhost:4566"
+# S3 buckets (local, không cần global-unique như AWS thật)
+variable "assets_bucket_name" {
+  default = "clickstream-assets-local-sg"
 }
 
-variable "bucket_media" {
-  description = "Media/assets bucket name."
-  type        = string
-  default     = "local-media-assets"
+variable "raw_clickstream_bucket_name" {
+  default = "clickstream-raw-local-sg"
 }
 
-variable "bucket_raw" {
-  description = "Raw clickstream bucket name."
-  type        = string
-  default     = "local-clickstream-raw"
+# Đường dẫn file .zip của Lambda (tương đối với thư mục terraform)
+variable "lambda_ingest_zip_path" {
+  default = "lambda/ingest.zip"
 }
 
-variable "bucket_processed" {
-  description = "Processed clickstream bucket name."
-  type        = string
-  default     = "local-clickstream-processed"
+variable "lambda_etl_zip_path" {
+  default = "lambda/etl.zip"
 }
 
-variable "sns_topic_name" {
-  description = "Alerts topic name."
-  type        = string
-  default     = "clickstream-local-alerts"
-}
-
-variable "lambda_runtime" {
-  description = "Runtime for Lambda functions."
-  type        = string
-  default     = "python3.10"
-}
-
-variable "lambda_handler" {
-  description = "Default handler for packaged lambdas."
-  type        = string
-  default     = "lambda_function.lambda_handler"
-}
-
-variable "lambda_ingest_zip" {
-  description = "Path to ingest lambda zip."
-  type        = string
-  default     = "output/lambda_ingest.zip"
-}
-
-variable "lambda_etl_zip" {
-  description = "Path to ETL lambda zip."
-  type        = string
-  default     = "output/lambda_etl.zip"
-}
-
-locals {
-  api_stage = "prod"
+# Lịch ETL – chạy mỗi 1 phút ở local để dễ test
+variable "etl_schedule_expression" {
+  default = "rate(1 minute)"
 }

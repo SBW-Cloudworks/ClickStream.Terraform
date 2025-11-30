@@ -7,32 +7,25 @@ terraform {
       version = "~> 5.0"
     }
   }
-
-  backend "local" {
-    path = "output/terraform.tfstate"
-  }
 }
 
 provider "aws" {
-  region                      = var.region
+  region                      = "ap-southeast-1" # Singapore
   access_key                  = "test"
   secret_key                  = "test"
-  s3_use_path_style           = true
   skip_credentials_validation = true
-  skip_metadata_api_check     = true
   skip_requesting_account_id  = true
+  skip_metadata_api_check     = true
+  s3_use_path_style           = true
 
   endpoints {
-    apigateway       = var.localstack_endpoint
-    cloudwatch       = var.localstack_endpoint
-    cloudwatchevents = var.localstack_endpoint
-    cloudwatchlogs   = var.localstack_endpoint
-    cognitoidp       = var.localstack_endpoint
-    ec2              = var.localstack_endpoint
-    iam              = var.localstack_endpoint
-    lambda           = var.localstack_endpoint
-    s3               = var.localstack_endpoint
-    sns              = var.localstack_endpoint
-    sts              = var.localstack_endpoint
+    apigateway   = "http://localhost:4566"
+    apigatewayv2 = "http://localhost:4566" # quan trọng cho aws_apigatewayv2_api
+    cloudwatch   = "http://localhost:4566"
+    events       = "http://localhost:4566"
+    iam          = "http://localhost:4566"
+    lambda       = "http://localhost:4566"
+    s3           = "http://localhost:4566"
+    sts          = "http://localhost:4566"
   }
 }
