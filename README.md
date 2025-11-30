@@ -10,6 +10,38 @@ This project implements a **Clickstream Analytics System** using AWS services wi
 The system emphasizes **low cost**, **scalability**, **security**, and **full control of the data warehouse layer**.
 
 ---
+## Terraform Deployment Instructions
+
+### Prerequisites
+
+- Terraform installed ([Download Terraform](https://developer.hashicorp.com/terraform/downloads))
+- AWS CLI installed and configured ([Guide](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html))
+- Python 3.x installed with `pip`
+
+### Deployment Steps
+
+#### 1️⃣ Clone the Repository
+```sh
+git clone <repository-url>
+cd Iac-Game-Scan
+```
+
+#### 2️⃣ Initialize Terraform
+```sh
+terraform init
+```
+
+#### 3️⃣ Validate Configuration
+```sh
+terraform validate
+```
+
+#### 4️⃣ Plan and Apply Terraform
+```sh
+terraform plan -out=tfplan
+terraform apply tfplan
+```
+---
 
 ## 📌 Architecture Components
 
