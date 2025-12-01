@@ -8,8 +8,13 @@ This stack matches the V10 diagram with these decisions:
 - Amplify enabled by default
 
 ## 0) Before you run
-1) Install Terraform >= 1.5 and AWS CLI; verify:
+1) Install Terraform >= 1.5 and AWS CLI
    ```bash
+   winget install --id HashiCorp.Terraform -e
+   winget install --id Amazon.AWSCLI -e
+   ```
+   Verify the install status
+   ```
    terraform version
    aws --version
    ```
