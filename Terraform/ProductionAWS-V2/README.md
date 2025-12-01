@@ -39,9 +39,14 @@ create VPC/Subnets/IGW/NAT (optional), IAM roles/policies, Lambda, API Gateway, 
    ```bash
    aws ec2 describe-availability-zones --region <region>
    ```
-5) Prepare Lambda ZIPs and point `lambda_ingest_zip`, `lambda_etl_zip` to real files.
-6) SSH/SSM: set `oltp_key_name`, `analytics_key_name` (or leave empty and use Session Manager).
-7) Amplify: provide repo URL, PAT, branch; keep `enable_amplify = true` unless you want to disable.
+**5) Prepare Lambda ZIPs** 
+   - build/package and point `lambda_ingest_zip`, `lambda_etl_zip` to real files.
+
+**6) SSH/SSM** 
+   - set `oltp_key_name`, `analytics_key_name` (or leave empty and use Session Manager).
+
+**7) Amplify** 
+   - provide repo URL, PAT, branch; keep `enable_amplify = true` unless you want to disable.
 
 ## 1) Remote state (recommended)
 1.1) Create an S3 bucket + DynamoDB table for state/lock:
